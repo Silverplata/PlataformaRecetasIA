@@ -1,0 +1,53 @@
+﻿<!-- Views/Recetas/Generar.cshtml -->
+@{
+    ViewData["Title"] = "Generar Receta con IA";
+}
+
+<h2>Generar Receta con IA</h2>
+<form id="generarForm" asp-action="Generar" method="post">
+    @Html.AntiForgeryToken()
+    <div class="form-group">
+        <label for="ingredientes">Ingredientes (separados por comas):</label>
+        <input type="text" class="form-control" id="ingredientes" name="ingredientes" placeholder="Ej: tomate, queso, harina" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Generar</button>
+</form>
+
+<div id="message" class="text-danger"></div>
+<div id="recetaGenerada" class="mt-3"></div>
+
+@section Scripts {
+    <script>
+        $("#generarForm").submit(function (e) {
+            e.preventDefault();
+            const ingredientes = $("#ingredientes").val();
+            const antiForgeryToken = $('input[name="__RequestVerificationToken"]').val();
+
+            console.log("Enviando solicitud con ingredientes:", ingredientes);
+            console.log("Token CSRF:", antiForgeryToken);
+
+            if (!antiForgeryToken) {
+                $("#message").text("Error: No se encontró el token CSRF.");
+                return;
+            }
+
+            $.ajax({
+                url: '/Recetas/Generar',
+                type: 'POST',
+                headers: {
+                    'RequestVerificationToken': antiForgeryToken
+                },
+                data: { ingredientes: ingredientes },
+                success: function (response) {
+                    console.log("Respuesta exitosa:", response);
+                    $("#recetaGenerada").html(`<pre>${response.receta}</pre>`);
+                    $("#message").text("");
+                },
+                error: function (xhr) {
+                    console.log("Error en la solicitud:", xhr);
+                    $("#message").text("Error: " + (xhr.responseJSON?.error || xhr.statusText));
+                }
+            });
+        });
+    </script>
+}

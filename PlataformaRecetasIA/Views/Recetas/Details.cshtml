@@ -1,0 +1,30 @@
+﻿<!-- Views/Recetas/Details.cshtml -->
+@model PlataformaRecetasIA.Models.Receta
+@{
+    ViewData["Title"] = "Detalles de la Receta";
+}
+
+<h2>Detalles de la Receta</h2>
+<div>
+    <h4>@Model.Nombre</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">Nombre:</dt>
+        <dd class="col-sm-10">@Model.Nombre</dd>
+        <dt class="col-sm-2">Descripción:</dt>
+        <dd class="col-sm-10">@Model.Descripcion</dd>
+        <dt class="col-sm-2">Porciones:</dt>
+        <dd class="col-sm-10">@Model.Porciones</dd>
+        <dt class="col-sm-2">Ingredientes:</dt>
+        <dd class="col-sm-10">
+            <ul>
+                @foreach (var ingrediente in Model.Ingredientes)
+                {
+                    <li>@ingrediente.Nombre: @ingrediente.Cantidad @ingrediente.Unidad</li>
+                }
+            </ul>
+        </dd>
+    </dl>
+</div>
+<a asp-action="Edit" asp-route-id="@Model.Id">Editar</a> |
+<a asp-action="Index">Volver</a>

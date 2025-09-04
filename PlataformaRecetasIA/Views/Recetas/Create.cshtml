@@ -1,0 +1,39 @@
+﻿<!-- Views/Recetas/Create.cshtml -->
+@model PlataformaRecetasIA.Models.Receta
+@{
+    ViewData["Title"] = "Crear Receta";
+}
+
+<h2>Crear Receta</h2>
+<form asp-action="Create" method="post">
+    <div class="form-group">
+        <label for="Nombre">Nombre:</label>
+        <input type="text" class="form-control" id="Nombre" asp-for="Nombre" required />
+    </div>
+    <div class="form-group">
+        <label for="Descripcion">Descripción:</label>
+        <textarea class="form-control" id="Descripcion" asp-for="Descripcion"></textarea>
+    </div>
+    <div class="form-group">
+        <label for="Porciones">Porciones:</label>
+        <input type="number" class="form-control" id="Porciones" asp-for="Porciones" min="1" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Crear</button>
+    <a asp-action="Index" class="btn btn-secondary">Volver</a>
+</form>
+
+<h3>Importar Recetas desde XML</h3>
+<form asp-action="ImportarXml" method="post" enctype="multipart/form-data">
+    <div class="form-group">
+        <label for="xmlFile">Archivo XML:</label>
+        <input type="file" class="form-control" id="xmlFile" name="xmlFile" accept=".xml" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Importar</button>
+</form>
+
+<div id="message" class="text-danger">
+    @if (ViewBag.Error != null)
+    {
+        @ViewBag.Error
+    }
+</div>

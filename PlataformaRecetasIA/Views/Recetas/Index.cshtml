@@ -1,0 +1,42 @@
+﻿<!-- Views/Recetas/Index.cshtml -->
+@model List<PlataformaRecetasIA.Models.Receta>
+@{
+    ViewData["Title"] = "Lista de Recetas";
+}
+
+<h2>Lista de Recetas</h2>
+
+@if (Model.Any())
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Nombre</th>
+                <th>Descripción</th>
+                <th>Porciones</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var receta in Model)
+            {
+                <tr>
+                    <td>@receta.Nombre</td>
+                    <td>@receta.Descripcion</td>
+                    <td>@receta.Porciones</td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@receta.Id">Detalles</a> |
+                        <a asp-action="Edit" asp-route-id="@receta.Id">Editar</a> |
+                        <a asp-action="Delete" asp-route-id="@receta.Id">Eliminar</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <p>No hay recetas disponibles.</p>
+}
+
+<a asp-action="Create" class="btn btn-primary">Agregar Nueva Receta</a>

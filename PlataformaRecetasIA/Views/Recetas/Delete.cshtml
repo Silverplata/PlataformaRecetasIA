@@ -1,0 +1,24 @@
+﻿<!-- Views/Recetas/Delete.cshtml -->
+@model PlataformaRecetasIA.Models.Receta
+@{
+    ViewData["Title"] = "Eliminar Receta";
+}
+
+<h2>Eliminar Receta</h2>
+<h3>¿Estás seguro de que quieres eliminar "@Model.Nombre"?</h3>
+<div>
+    <dl class="row">
+        <dt class="col-sm-2">Nombre:</dt>
+        <dd class="col-sm-10">@Model.Nombre</dd>
+        <dt class="col-sm-2">Descripción:</dt>
+        <dd class="col-sm-10">@Model.Descripcion</dd>
+        <dt class="col-sm-2">Porciones:</dt>
+        <dd class="col-sm-10">@Model.Porciones</dd>
+    </dl>
+
+    <form asp-action="Delete" method="post">
+        <input type="hidden" asp-for="Id" />
+        <button type="submit" class="btn btn-danger">Eliminar</button>
+        <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
+    </form>
+</div>

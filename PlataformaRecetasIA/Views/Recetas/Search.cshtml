@@ -1,0 +1,20 @@
+﻿<!-- Views/Recetas/Search.cshtml -->
+@{
+    ViewData["Title"] = "Buscar Recetas";
+}
+
+<h2>Buscar Recetas</h2>
+<form asp-action="Search" method="post">
+    <div class="form-group">
+        <label for="searchTerm">Buscar por nombre o descripción:</label>
+        <input type="text" class="form-control" id="searchTerm" name="searchTerm" placeholder="Ingresa un término de búsqueda" required />
+    </div>
+    <button type="submit" class="btn btn-primary">Buscar</button>
+</form>
+
+<div id="message" class="text-danger">
+    @if (ViewBag.Error != null)
+    {
+        @ViewBag.Error
+    }
+</div>
