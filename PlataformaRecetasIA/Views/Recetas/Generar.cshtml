@@ -37,6 +37,7 @@
                 headers: {
                     'RequestVerificationToken': antiForgeryToken
                 },
+                contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
                 data: { ingredientes: ingredientes },
                 success: function (response) {
                     console.log("Respuesta exitosa:", response);
@@ -46,6 +47,10 @@
                 error: function (xhr) {
                     console.log("Error en la solicitud:", xhr);
                     $("#message").text("Error: " + (xhr.responseJSON?.error || xhr.statusText));
+                    if (xhr.status === 401) {
+                        console.log("Redirigiendo al login por 401...");
+                        window.location.href = '@Url.Action("Login", "Auth")';
+                    }
                 }
             });
         });

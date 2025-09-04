@@ -1,5 +1,4 @@
-﻿// Data/AppDbContext.cs
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using PlataformaRecetasIA.Models;
 
 namespace PlataformaRecetasIA.Data
@@ -13,6 +12,7 @@ namespace PlataformaRecetasIA.Data
 
         public DbSet<Receta> Recetas { get; set; }
         public DbSet<Ingrediente> Ingredientes { get; set; }
+        public DbSet<Usuario> Usuarios { get; set; } // Nueva tabla
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -20,6 +20,11 @@ namespace PlataformaRecetasIA.Data
                 .HasMany(r => r.Ingredientes)
                 .WithOne(i => i.Receta)
                 .HasForeignKey(i => i.RecetaId);
+
+            // Configuración para Usuarios
+            modelBuilder.Entity<Usuario>()
+                .HasIndex(u => u.Username)
+                .IsUnique(); // Username debe ser único
         }
     }
 }

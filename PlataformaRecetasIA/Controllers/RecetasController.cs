@@ -9,6 +9,7 @@ using System.Text.Json;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Authorization;
 
 namespace PlataformaRecetasIA.Controllers
 {
@@ -29,6 +30,7 @@ namespace PlataformaRecetasIA.Controllers
 
         // GET: /Recetas/Index
         [HttpGet]
+        [Authorize]
         public IActionResult Index()
         {
             var recetas = _context.Recetas.ToList();
@@ -36,6 +38,7 @@ namespace PlataformaRecetasIA.Controllers
         }
 
         // GET: /Recetas/Details/5
+        [Authorize]
         public IActionResult Details(int id)
         {
             var receta = _context.Recetas
@@ -47,6 +50,7 @@ namespace PlataformaRecetasIA.Controllers
         }
 
         // GET: /Recetas/Create
+        [Authorize]
         public IActionResult Create()
         {
             return View();
@@ -55,6 +59,7 @@ namespace PlataformaRecetasIA.Controllers
         // POST: /Recetas/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Create(Receta receta)
         {
             if (ModelState.IsValid)
@@ -67,6 +72,7 @@ namespace PlataformaRecetasIA.Controllers
         }
 
         // GET: /Recetas/Edit/5
+        [Authorize]
         public IActionResult Edit(int id)
         {
             var receta = _context.Recetas.Find(id);
@@ -78,6 +84,7 @@ namespace PlataformaRecetasIA.Controllers
         // POST: /Recetas/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Edit(int id, Receta receta)
         {
             if (id != receta.Id)
@@ -99,6 +106,7 @@ namespace PlataformaRecetasIA.Controllers
         }
 
         // GET: /Recetas/Delete/5
+        [Authorize]
         public IActionResult Delete(int id)
         {
             var receta = _context.Recetas.Find(id);
@@ -110,6 +118,7 @@ namespace PlataformaRecetasIA.Controllers
         // POST: /Recetas/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult DeleteConfirmed(int id)
         {
             var receta = _context.Recetas.Find(id);
@@ -129,6 +138,7 @@ namespace PlataformaRecetasIA.Controllers
         }
 
         // GET: /Recetas/Search
+        [Authorize]
         public IActionResult Search()
         {
             return View();
@@ -137,6 +147,7 @@ namespace PlataformaRecetasIA.Controllers
         // POST: /Recetas/Search
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Search(string searchTerm)
         {
             var recetas = _context.Recetas
@@ -146,6 +157,7 @@ namespace PlataformaRecetasIA.Controllers
         }
 
         // GET: /Recetas/Portions
+        [Authorize]
         public IActionResult Portions()
         {
             var recetas = _context.Recetas.ToList();
@@ -155,6 +167,7 @@ namespace PlataformaRecetasIA.Controllers
         // POST: /Recetas/Portions
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult Portions(int recetaId, int nuevasPorciones)
         {
             var receta = _context.Recetas
@@ -175,6 +188,7 @@ namespace PlataformaRecetasIA.Controllers
         // POST: /Recetas/ImportarXml
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public IActionResult ImportarXml(IFormFile xmlFile)
         {
             if (xmlFile == null || xmlFile.Length == 0)
@@ -196,6 +210,7 @@ namespace PlataformaRecetasIA.Controllers
         }
 
         // GET: /Recetas/Generar
+        [Authorize]
         public IActionResult Generar()
         {
             return View();
@@ -204,9 +219,10 @@ namespace PlataformaRecetasIA.Controllers
         // POST: /Recetas/Generar
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [Authorize]
         public async Task<IActionResult> Generar([FromForm] string ingredientes)
         {
-            _logger.LogInformation("Iniciando Generar con ingredientes: {Ingredientes}", ingredientes);
+            _logger.LogInformation("Iniciando Generar con ingredientes: {Ingredientes}, User: {User}", ingredientes, User.Identity.Name);
 
             if (!ModelState.IsValid)
             {
@@ -290,7 +306,6 @@ namespace PlataformaRecetasIA.Controllers
         }
     }
 
-    // Clases auxiliares para deserializar la respuesta de OpenAI
     public class OpenAIResponse
     {
         public List<Choice> choices { get; set; }

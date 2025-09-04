@@ -11,7 +11,7 @@
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-sm navbar-light bg-white border-bottom box-shadow mb-3">
             <div class="container-fluid">
                 <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">PlataformaRecetasIA</a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
@@ -23,23 +23,29 @@
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="recetas-menu" style="display: none;">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Recetas" asp-action="Index">Recetas</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="agregar-menu" style="display: none;">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Recetas" asp-action="Create">Agregar Receta</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="buscar-menu" style="display: none;">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Recetas" asp-action="Search">Buscar</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="porciones-menu" style="display: none;">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Recetas" asp-action="Portions">Calculadora de Porciones</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="generar-menu" style="display: none;">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Recetas" asp-action="Generar">Generar Receta</a>
                         </li>
-                        <li class="nav-item">
+                        <li class="nav-item" id="login-menu">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Login">Iniciar Sesión</a>
+                        </li>
+                        <li class="nav-item" id="register-menu">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Register">Registrarse</a>
+                        </li>
+                        <li class="nav-item" id="logout-menu" style="display: none;">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Auth" asp-action="Logout">Cerrar Sesión</a>
                         </li>
                     </ul>
                 </div>
@@ -60,6 +66,60 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script>
+        function getCookie(name) {
+            const value = `; ${document.cookie}`;
+            const parts = value.split(`; ${name}=`);
+            if (parts.length === 2) return parts.pop().split(';').shift();
+            return null;
+        }
+
+        function updateMenu() {
+            // Usamos una solicitud al servidor para verificar la autenticación
+            $.ajax({
+                url: '/Auth/CheckAuth',
+                type: 'GET',
+                success: function (response) {
+                    console.log("Estado de autenticación:", response.authenticated);
+                    if (response.authenticated) {
+                        $('#recetas-menu').show();
+                        $('#agregar-menu').show();
+                        $('#buscar-menu').show();
+                        $('#porciones-menu').show();
+                        $('#generar-menu').show();
+                        $('#login-menu').hide();
+                        $('#register-menu').hide();
+                        $('#logout-menu').show();
+                    } else {
+                        $('#recetas-menu').hide();
+                        $('#agregar-menu').hide();
+                        $('#buscar-menu').hide();
+                        $('#porciones-menu').hide();
+                        $('#generar-menu').hide();
+                        $('#login-menu').show();
+                        $('#register-menu').show();
+                        $('#logout-menu').hide();
+                    }
+                },
+                error: function (xhr) {
+                    console.log("Error al verificar autenticación:", xhr.status);
+                    $('#recetas-menu').hide();
+                    $('#agregar-menu').hide();
+                    $('#buscar-menu').hide();
+                    $('#porciones-menu').hide();
+                    $('#generar-menu').hide();
+                    $('#login-menu').show();
+                    $('#register-menu').show();
+                    $('#logout-menu').hide();
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            console.log("Documento listo, verificando autenticación...");
+            updateMenu(); // Actualizar menú al cargar la página
+        });
+    </script>
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
