@@ -10,7 +10,8 @@
 - **Importación de recetas**: Carga de recetas desde archivos XML.
 - **Búsqueda de recetas**: Filtrado de recetas por nombre o descripción.
 - **Calculadora de porciones**: Ajuste dinámico de cantidades de ingredientes según el número de porciones.
-- **Generación de recetas con IA**: Creación de recetas personalizadas usando la API de OpenAI, basada en los ingredientes proporcionados.
+- **Generación de recetas con IA**: Creación de recetas personalizadas usando la API de OpenAI, basada en los ingredientes proporcionados (restringida a usuarios con permiso CanUseAI = 1).
+- **Control de acceso a IA: Solo los usuarios con el campo CanUseAI = 1 pueden acceder a la funcionalidad de generación de recetas con IA.
 - **Despliegue en Docker**: Configuración lista para desplegar en plataformas gratuitas como Render.
 
 ## Tecnologías utilizadas

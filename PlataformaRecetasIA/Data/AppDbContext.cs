@@ -12,7 +12,7 @@ namespace PlataformaRecetasIA.Data
 
         public DbSet<Receta> Recetas { get; set; }
         public DbSet<Ingrediente> Ingredientes { get; set; }
-        public DbSet<Usuario> Usuarios { get; set; } // Nueva tabla
+        public DbSet<Usuario> Usuarios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -24,7 +24,12 @@ namespace PlataformaRecetasIA.Data
             // Configuración para Usuarios
             modelBuilder.Entity<Usuario>()
                 .HasIndex(u => u.Username)
-                .IsUnique(); // Username debe ser único
+                .IsUnique();
+
+            // Configurar valor por defecto para CanUseAI
+            modelBuilder.Entity<Usuario>()
+                .Property(u => u.CanUseAI)
+                .HasDefaultValue(0);
         }
     }
 }

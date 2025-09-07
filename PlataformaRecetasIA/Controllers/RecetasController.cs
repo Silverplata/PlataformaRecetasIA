@@ -213,6 +213,12 @@ namespace PlataformaRecetasIA.Controllers
         [Authorize]
         public IActionResult Generar()
         {
+            var username = User.Identity.Name;
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Username == username);
+            if (usuario == null || usuario.CanUseAI != 1)
+            {
+                return RedirectToAction("Index", "Recetas");
+            }
             return View();
         }
 
@@ -222,7 +228,15 @@ namespace PlataformaRecetasIA.Controllers
         [Authorize]
         public async Task<IActionResult> Generar([FromForm] string ingredientes)
         {
-            _logger.LogInformation("Iniciando Generar con ingredientes: {Ingredientes}, User: {User}", ingredientes, User.Identity.Name);
+            var username = User.Identity.Name;
+            var usuario = _context.Usuarios.FirstOrDefault(u => u.Username == username);
+            if (usuario == null || usuario.CanUseAI != 1)
+            {
+                _logger.LogWarning("Usuario {User} no tiene permiso para usar IA.", username);
+                return BadRequest(new { error = "No tienes permiso para generar recetas con IA." });
+            }
+
+            _logger.LogInformation("Iniciando Generar con ingredientes: {Ingredientes}, User: {User}", ingredientes, username);
 
             if (!ModelState.IsValid)
             {

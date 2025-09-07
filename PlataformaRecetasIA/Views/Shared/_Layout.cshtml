@@ -67,26 +67,19 @@
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script>
-        function getCookie(name) {
-            const value = `; ${document.cookie}`;
-            const parts = value.split(`; ${name}=`);
-            if (parts.length === 2) return parts.pop().split(';').shift();
-            return null;
-        }
-
         function updateMenu() {
             // Usamos una solicitud al servidor para verificar la autenticación
             $.ajax({
                 url: '/Auth/CheckAuth',
                 type: 'GET',
                 success: function (response) {
-                    console.log("Estado de autenticación:", response.authenticated);
+                    console.log("Estado de autenticación:", response.authenticated, "CanUseAI:", response.canUseAI);
                     if (response.authenticated) {
                         $('#recetas-menu').show();
                         $('#agregar-menu').show();
                         $('#buscar-menu').show();
                         $('#porciones-menu').show();
-                        $('#generar-menu').show();
+                        $('#generar-menu').toggle(response.canUseAI); // Mostrar solo si canUseAI es true
                         $('#login-menu').hide();
                         $('#register-menu').hide();
                         $('#logout-menu').show();

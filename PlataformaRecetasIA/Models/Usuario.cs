@@ -13,5 +13,7 @@ namespace PlataformaRecetasIA.Models
         [Required]
         [StringLength(100)]
         public string PasswordHash { get; set; } // Almacenaremos la contraseña hasheada
+
+        public int CanUseAI { get; set; } = 0; // Campo para controlar acceso a IA, por defecto 0
     }
 }

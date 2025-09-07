@@ -70,7 +70,8 @@ namespace PlataformaRecetasIA.Controllers
             var usuario = new Usuario
             {
                 Username = user.Username,
-                PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.Password)
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(user.Password),
+                CanUseAI = 0 // Valor por defecto
             };
 
             _context.Usuarios.Add(usuario);
@@ -97,7 +98,15 @@ namespace PlataformaRecetasIA.Controllers
         [HttpGet]
         public IActionResult CheckAuth()
         {
-            return Json(new { authenticated = User.Identity.IsAuthenticated });
+            var authenticated = User.Identity.IsAuthenticated;
+            var canUseAI = false;
+            if (authenticated)
+            {
+                var username = User.Identity.Name;
+                var usuario = _context.Usuarios.FirstOrDefault(u => u.Username == username);
+                canUseAI = usuario != null && usuario.CanUseAI == 1;
+            }
+            return Json(new { authenticated, canUseAI });
         }
 
         private string GenerateJwtToken(Usuario usuario)
